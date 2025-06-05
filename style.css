@@ -1,0 +1,29 @@
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Basic modal styling */
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
+    transition: opacity 0.3s ease-out;
+}
+.modal-content {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+.modal-overlay.active .modal-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+.loading-overlay {
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 60; /* Above modal if necessary */
+}
+.spinner {
+    border-top-color: #6366F1; /* Indigo 500 */
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

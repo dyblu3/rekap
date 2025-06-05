@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Ngajar Privat</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-indigo-50 to-purple-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md border border-gray-100">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-indigo-700 mb-6 text-center">Rekap Ngajar Privat</h1>
+
+        <p id="userIdDisplay" class="text-xs text-gray-500 mb-4 text-center hidden">
+            ID Pengguna: <span class="font-mono bg-indigo-50 text-indigo-700 px-2 py-1 rounded-lg"></span>
+        </p>
+
+        <!-- Total Earnings Summary -->
+        <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-5 rounded-xl text-center shadow-lg mb-6 transform hover:scale-105 transition-transform duration-300">
+            <p class="text-base font-medium opacity-90">Total Pendapatan:</p>
+            <p id="totalEarnings" class="text-3xl sm:text-4xl font-extrabold mt-1">Rp0</p>
+        </div>
+
+        <!-- Add/Edit Session Form -->
+        <div class="mb-6 border-t border-gray-200 pt-6">
+            <h2 id="formTitle" class="text-xl font-semibold text-gray-700 mb-5">Tambahkan Sesi Baru</h2>
+            <input
+                type="date"
+                id="sessionDate"
+                class="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+            />
+            <input
+                type="text"
+                placeholder="Nama Murid"
+                id="studentName"
+                list="student-names"
+                class="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+            />
+            <datalist id="student-names"></datalist>
+            <input
+                type="text"
+                placeholder="Topik Pelajaran"
+                id="topic"
+                list="topics-list"
+                class="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+            />
+            <datalist id="topics-list"></datalist>
+            <input
+                type="number"
+                placeholder="Durasi (jam, mis: 1.5)"
+                id="duration"
+                step="0.5"
+                class="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+            />
+            <input
+                type="number"
+                placeholder="Biaya (Rp)"
+                id="fee"
+                class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+            />
+            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                <button
+                    id="saveSessionBtn"
+                    class="flex-1 bg-indigo-600 text-white p-3 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200 shadow-md transform hover:scale-105"
+                >
+                    Tambahkan Sesi
+                </button>
+                <button
+                    id="cancelEditBtn"
+                    class="bg-gray-400 text-white p-3 rounded-lg font-semibold hover:bg-gray-500 transition duration-200 shadow-md transform hover:scale-105 hidden"
+                >
+                    Batal Edit
+                </button>
+            </div>
+
+            <p id="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-lg text-center mt-4 text-sm hidden"></p>
+            <p id="successMessage" class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-lg text-center mt-4 text-sm hidden"></p>
+        </div>
+
+        <!-- Sessions List -->
+        <div class="border-t border-gray-200 pt-6">
+            <h2 class="text-xl font-semibold text-gray-700 mb-5">Daftar Sesi</h2>
+
+            <!-- Filter Inputs -->
+            <div class="mb-5 space-y-3">
+                <input
+                    type="text"
+                    placeholder="Filter berdasarkan Nama Murid"
+                    id="filterStudentName"
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+                />
+                <input
+                    type="text"
+                    placeholder="Filter berdasarkan Topik Pelajaran"
+                    id="filterTopic"
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+                />
+                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-2">
+                    <input
+                        type="date"
+                        id="filterStartDate"
+                        class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+                        title="Filter Tanggal Mulai"
+                    />
+                    <input
+                        type="date"
+                        id="filterEndDate"
+                        class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+                        title="Filter Tanggal Akhir"
+                    />
+                </div>
+                <button
+                    id="clearAllFiltersBtn"
+                    class="w-full bg-gray-200 text-gray-800 p-3 rounded-lg font-semibold hover:bg-gray-300 transition duration-200 shadow-md transform hover:scale-105"
+                >
+                    Hapus Semua Filter
+                </button>
+            </div>
+
+            <ul id="sessionsList" class="space-y-4">
+                <p id="noSessionsMessage" class="text-gray-500 text-center py-4">Belum ada sesi mengajar yang dicatat atau sesuai filter.</p>
+            </ul>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div id="deleteConfirmModal" class="fixed inset-0 bg-gray-600 bg-opacity-0 flex items-center justify-center p-4 z-50 modal-overlay hidden">
+            <div class="bg-white rounded-lg shadow-2xl p-6 max-w-sm w-full modal-content transform translate-y-20 scale-95 opacity-0">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Konfirmasi Penghapusan</h3>
+                <p class="text-gray-700 mb-6">Apakah Anda yakin ingin menghapus sesi ini? Tindakan ini tidak dapat dibatalkan.</p>
+                <div class="flex justify-end space-x-3">
+                    <button
+                        id="cancelDeleteBtnModal"
+                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors duration-200 font-medium"
+                    >
+                        Batal
+                    </button>
+                    <button
+                        id="confirmDeleteBtn"
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 font-medium"
+                    >
+                        Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="fixed inset-0 flex items-center justify-center loading-overlay hidden">
+            <div class="spinner border-4 border-t-4 border-gray-200 h-12 w-12 rounded-full"></div>
+        </div>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
